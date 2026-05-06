@@ -1,0 +1,6 @@
+@echo off
+cd relatorio_equipamentos_site\nextjs_space
+echo Verificando dependencias...
+call npm install --legacy-peer-deps
+echo Iniciando projeto na porta 3001...
+npm run dev -- -p 3001

@@ -1,0 +1,42 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model Upload {
+  id              String   @id @default(cuid())
+  fileName        String
+  cloudStoragePath String?
+  isPublic        Boolean  @default(false)
+  recordCount     Int      @default(0)
+  createdAt       DateTime @default(now())
+  installations   Installation[]
+}
+
+model Installation {
+  id        String   @id @default(cuid())
+  tecnico   String
+  descricao String
+  serial    String
+  data      DateTime?
+  uploadId  String
+  upload    Upload   @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+
+  @@index([uploadId])
+  @@index([tecnico])
+  @@index([descricao])
+}
