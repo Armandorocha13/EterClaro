@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, UserPlus, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 
 export default function LoginPage() {
@@ -25,70 +25,72 @@ export default function LoginPage() {
         redirect: false,
       });
       if (res?.error) {
-        setError('E-mail ou senha incorretos');
+        setError('E-mail ou senha inválidos');
       } else {
         router.replace('/');
       }
     } catch {
-      setError('Erro ao processar login');
+      setError('Erro de conexão');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4 selection:bg-black selection:text-white">
-      <div className="w-full max-w-md">
-        {/* Login Card */}
-        <div className="bg-white border-2 border-black rounded-sm shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-8 sm:p-12">
-          <div className="flex flex-col items-center mb-10">
-            <div className="relative h-20 w-48 mb-8">
-              <Image
-                src="/logo.png"
-                alt="Logo ETER"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="space-y-1 text-center">
-              <h1 className="text-xl font-black uppercase tracking-tighter text-black">Acesso ao Sistema</h1>
-              <p className="text-[10px] font-bold text-black/40 uppercase tracking-[0.2em]">PROJEÇÃO DE MATERIAL CLARO</p>
-            </div>
+    <div className="min-h-screen bg-[#f3f4f6] flex flex-col font-sans text-[#202124]">
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center p-6">
+        <div className="w-full max-w-[480px] bg-white rounded-[40px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] p-12 sm:p-16 flex flex-col items-center animate-fade-in">
+          
+          {/* Logo Area */}
+          <div className="relative h-20 w-20 mb-8">
+            <Image
+              src="/logo.png"
+              alt="Logo ETER"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Titles */}
+          <h1 className="text-[28px] font-bold text-[#0f172a] mb-2 tracking-tight">Área Administrativa</h1>
+          <p className="text-sm text-gray-400 mb-12">Acesse para gerenciar relatórios</p>
+
+          <form onSubmit={handleSubmit} className="w-full space-y-8">
+            {/* Email Field */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-black uppercase tracking-widest block ml-1">E-mail Corporativo</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.1em] ml-1">Endereço de Email</label>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black transition-transform group-focus-within:scale-110" />
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 transition-colors group-focus-within:text-[#0f172a]" />
                 <input
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 border-2 border-black rounded-sm focus:bg-black/5 outline-none font-bold text-sm placeholder:text-black/20 placeholder:font-medium transition-all"
-                  placeholder="EX: NOME@ETER.COM.BR"
+                  className="w-full pl-14 pr-6 py-4 bg-[#f8fafc] border border-gray-100 rounded-full focus:bg-white focus:ring-1 focus:ring-gray-200 outline-none font-medium text-sm text-[#0f172a] placeholder:text-gray-300 transition-all"
+                  placeholder="seu@email.com"
                   required
                 />
               </div>
             </div>
 
+            {/* Password Field */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-black uppercase tracking-widest block ml-1">Senha de Acesso</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.1em] ml-1">Senha de Acesso</label>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black transition-transform group-focus-within:scale-110" />
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 transition-colors group-focus-within:text-[#0f172a]" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3.5 border-2 border-black rounded-sm focus:bg-black/5 outline-none font-bold text-sm placeholder:text-black/20 placeholder:font-medium transition-all"
+                  className="w-full pl-14 pr-14 py-4 bg-[#f8fafc] border border-gray-100 rounded-full focus:bg-white focus:ring-1 focus:ring-gray-200 outline-none font-medium text-sm text-[#0f172a] placeholder:text-gray-300 transition-all"
                   placeholder="••••••••"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-black/40 hover:text-black transition-colors"
+                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -96,34 +98,33 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-black text-white text-[10px] font-black uppercase tracking-widest px-4 py-3 border-2 border-black text-center animate-shake">
+              <div className="text-xs text-center font-bold text-red-500 bg-red-50 py-3 rounded-full border border-red-100 animate-shake">
                 {error}
               </div>
             )}
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white py-4 rounded-sm font-black uppercase tracking-[0.2em] text-xs hover:bg-white hover:text-black border-2 border-black transition-all disabled:opacity-30 active:translate-y-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+              className="w-full bg-[#0f172a] text-white py-4 rounded-full font-bold text-sm hover:bg-[#1e293b] transition-all disabled:opacity-50 shadow-lg shadow-gray-200 active:scale-[0.98]"
             >
-              {loading ? 'AUTENTICANDO...' : 'ENTRAR NO SISTEMA'}
+              {loading ? 'Entrando...' : 'Entrar no Sistema'}
             </button>
           </form>
-        </div>
 
-        <div className="mt-12 text-center space-y-4">
-          <p className="text-[10px] font-black text-black/20 uppercase tracking-[0.3em]">
-            ETER - Eletricidade e Telecomunicações Ltda
-          </p>
-          <div className="flex items-center justify-center gap-4 text-[9px] font-bold text-black/40 uppercase tracking-widest">
-            <span>Privacidade</span>
-            <span className="h-1 w-1 bg-black/10 rounded-full"></span>
-            <span>Termos de Uso</span>
-            <span className="h-1 w-1 bg-black/10 rounded-full"></span>
-            <span>Suporte TI</span>
+          {/* Footer Link */}
+          <div className="mt-12 flex items-center gap-2 text-xs font-bold text-gray-500 cursor-pointer hover:text-black transition-colors group">
+            <UserPlus className="w-3.5 h-3.5 text-gray-400 group-hover:text-black" />
+            <span>Não tem conta? <span className="text-[#0f172a] underline underline-offset-4">Cadastre-se agora</span></span>
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Bottom Footer */}
+      <footer className="py-6 text-center text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] shrink-0">
+        © 2026 • Relatório de Instalações • Gestão de Dados
+      </footer>
     </div>
   );
 }
