@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Users, Shield, ShieldAlert, Loader2, Search, Check, ChevronLeft } from 'lucide-react';
+import { Users, Shield, ShieldAlert, Loader2, Search, Check, ChevronLeft, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface User {
