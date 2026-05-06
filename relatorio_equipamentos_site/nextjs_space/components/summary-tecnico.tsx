@@ -14,7 +14,7 @@ function VolumeBadge({ volume }: { volume: string }) {
 export function SummaryTecnico({ data }: { data: ResumoTecnico[] }) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-5">
-      <h2 className="text-sm font-bold text-slate-700 mb-3">👷 Resumo por Técnico — Total de Reposição 7 Dias</h2>
+      <h2 className="text-sm font-bold text-slate-700 mb-3">Resumo por Técnico — Total de Reposição 7 Dias</h2>
       <div className="max-h-[500px] overflow-auto border border-slate-200 rounded-lg">
         <table className="w-full text-sm">
           <thead className="sticky top-0 z-10">
@@ -32,7 +32,7 @@ export function SummaryTecnico({ data }: { data: ResumoTecnico[] }) {
               <tr><td colSpan={6} className="text-center py-8 text-slate-400">Nenhum dado encontrado</td></tr>
             ) : (data ?? []).map((row: ResumoTecnico, i: number) => (
               <tr key={`${row?.tecnico}-${i}`} className="hover:bg-blue-50/50 transition-colors">
-                <td className="px-3 py-2 font-medium text-blue-700 border-b border-slate-100">{row?.tecnico ?? ''}</td>
+                <td className="px-3 py-2 font-medium text-blue-700 border-b border-slate-100">{row?.tecnico?.toUpperCase?.() ?? ''}</td>
                 <td className="px-3 py-2 text-right font-mono border-b border-slate-100">{row?.totalInstalacoes ?? 0}</td>
                 <td className="px-3 py-2 text-right font-mono text-slate-500 border-b border-slate-100">{row?.diasRelatorio ?? 0}</td>
                 <td className="px-3 py-2 text-right font-mono border-b border-slate-100">{row?.mediaDiariaTotal?.toFixed?.(2) ?? '0.00'}</td>

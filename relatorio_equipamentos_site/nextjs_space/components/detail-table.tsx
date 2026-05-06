@@ -29,7 +29,7 @@ export function DetailTable({ data }: { data: TecnicoModeloStats[] }) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-5">
-      <h2 className="text-sm font-bold text-slate-700 mb-3">📋 Tabela Detalhada — Técnico × Modelo</h2>
+      <h2 className="text-sm font-bold text-slate-700 mb-3">Tabela Detalhada — Técnico × Modelo</h2>
       <div className="max-h-[500px] overflow-auto border border-slate-200 rounded-lg">
         <table className="w-full text-sm">
           <thead className="sticky top-0 z-10">
@@ -47,7 +47,7 @@ export function DetailTable({ data }: { data: TecnicoModeloStats[] }) {
               <tr><td colSpan={6} className="text-center py-8 text-slate-400">Nenhum dado encontrado</td></tr>
             ) : sorted.map((row: TecnicoModeloStats, i: number) => (
               <tr key={`${row?.tecnico}-${row?.modelo}-${i}`} className="hover:bg-blue-50/50 transition-colors">
-                <td className="px-3 py-2 font-medium text-blue-700 border-b border-slate-100">{row?.tecnico ?? ''}</td>
+                <td className="px-3 py-2 font-medium text-blue-700 border-b border-slate-100">{row?.tecnico?.toUpperCase?.() ?? ''}</td>
                 <td className="px-3 py-2 border-b border-slate-100">{row?.modelo ?? ''}</td>
                 <td className="px-3 py-2 text-right font-mono border-b border-slate-100">{row?.qtdTotal ?? 0}</td>
                 <td className="px-3 py-2 text-right font-mono text-slate-500 border-b border-slate-100">{row?.diasRelatorio ?? 0}</td>

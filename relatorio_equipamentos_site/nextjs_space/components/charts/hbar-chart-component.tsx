@@ -8,11 +8,15 @@ interface Props {
 }
 
 export default function HBarChartComponent({ data, color }: Props) {
-  const safeData = [...(data ?? [])].reverse().map((d: any) => ({
-    name: (d?.name ?? '').length > 22 ? (d?.name ?? '').substring(0, 20) + '...' : (d?.name ?? ''),
-    fullName: d?.name ?? '',
-    value: d?.value ?? 0,
-  }));
+  const safeData = [...(data ?? [])].reverse().map((d: any) => {
+    const parts = (d?.name ?? '').trim().split(/\s+/);
+    const shortName = (parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1]}` : (d?.name ?? '')).toUpperCase();
+    return {
+      name: shortName,
+      fullName: (d?.name ?? '').toUpperCase(),
+      value: d?.value ?? 0,
+    };
+  });
 
   const height = Math.max(300, (safeData?.length ?? 0) * 28);
 

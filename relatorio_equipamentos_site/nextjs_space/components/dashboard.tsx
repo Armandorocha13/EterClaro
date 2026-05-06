@@ -144,7 +144,7 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
   }
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8">
       {/* Info box */}
       <div className="bg-black text-white p-5 rounded-lg flex items-start gap-4 shadow-lg">
         <div className="bg-white/10 p-2 rounded">
@@ -172,7 +172,7 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
             className="border border-black/10 rounded-md px-4 py-2 text-sm bg-white min-w-[200px] focus:ring-1 focus:ring-black focus:border-black outline-none font-semibold transition-all hover:border-black/30"
           >
             <option value="">TODOS OS TÉCNICOS</option>
-            {(data?.tecnicos ?? []).map((t: string) => <option key={t} value={t}>{t}</option>)}
+            {(data?.tecnicos ?? []).map((t: string) => <option key={t} value={t}>{t.toUpperCase()}</option>)}
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
@@ -231,10 +231,10 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
 
 function buildPdfHtml(filtered: any, uploadInfo: any) {
   const detailRows = (filtered?.detailTable ?? []).map((r: any) =>
-    `<tr><td>${r?.tecnico ?? ''}</td><td>${r?.modelo ?? ''}</td><td class="num">${r?.qtdTotal ?? 0}</td><td class="num">${r?.diasRelatorio ?? 0}</td><td class="num">${r?.mediaDiaria ?? 0}</td><td class="num">${r?.projecao7Dias ?? 0}</td></tr>`
+    `<tr><td>${(r?.tecnico ?? '').toUpperCase()}</td><td>${r?.modelo ?? ''}</td><td class="num">${r?.qtdTotal ?? 0}</td><td class="num">${r?.diasRelatorio ?? 0}</td><td class="num">${r?.mediaDiaria ?? 0}</td><td class="num">${r?.projecao7Dias ?? 0}</td></tr>`
   ).join('');
   const tecRows = (filtered?.resumoTecnicos ?? []).map((r: any) =>
-    `<tr><td>${r?.tecnico ?? ''}</td><td class="num">${r?.totalInstalacoes ?? 0}</td><td class="num">${r?.diasRelatorio ?? 0}</td><td class="num">${r?.mediaDiariaTotal ?? 0}</td><td class="num">${r?.reposicao7Dias ?? 0}</td><td><span class="badge badge-${(r?.volume ?? 'Baixo') === 'Alto' ? 'high' : (r?.volume ?? 'Baixo') === 'Médio' ? 'med' : 'low'}">${r?.volume ?? ''}</span></td></tr>`
+    `<tr><td>${(r?.tecnico ?? '').toUpperCase()}</td><td class="num">${r?.totalInstalacoes ?? 0}</td><td class="num">${r?.diasRelatorio ?? 0}</td><td class="num">${r?.mediaDiariaTotal ?? 0}</td><td class="num">${r?.reposicao7Dias ?? 0}</td><td><span class="badge badge-${(r?.volume ?? 'Baixo') === 'Alto' ? 'high' : (r?.volume ?? 'Baixo') === 'Médio' ? 'med' : 'low'}">${r?.volume ?? ''}</span></td></tr>`
   ).join('');
   const modRows = (filtered?.resumoModelos ?? []).map((r: any) =>
     `<tr><td>${r?.modelo ?? ''}</td><td class="num">${r?.qtdTotal ?? 0}</td><td class="num">${r?.tecnicosQueInstalam ?? 0}</td><td class="num">${r?.mediaDiariaGeral ?? 0}</td><td class="num">${r?.reposicao7Dias ?? 0}</td></tr>`

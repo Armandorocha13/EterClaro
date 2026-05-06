@@ -5,26 +5,7 @@ import type { KPIs } from '@/lib/excel-utils';
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from 'react';
 
-function AnimatedNumber({ value, duration = 1000 }: { value: number; duration?: number }) {
-  const [current, setCurrent] = useState(0);
-  const { ref, inView } = useInView({ triggerOnce: true });
 
-  useEffect(() => {
-    if (!inView) return;
-    const start = 0;
-    const end = value ?? 0;
-    const startTime = Date.now();
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      setCurrent(Math.round(start + (end - start) * progress));
-      if (progress < 1) requestAnimationFrame(animate);
-    };
-    animate();
-  }, [inView, value, duration]);
-
-  return <span ref={ref}>{current?.toLocaleString?.('pt-BR') ?? '0'}</span>;
-}
 
 const cards = [
   { key: 'totalInstalacoes', label: 'Total Instalações', icon: BarChart3 },
@@ -57,7 +38,7 @@ export function KpiCards({ kpis }: { kpis: KPIs }) {
               <div>
                 <p className="text-[10px] font-black text-black/40 uppercase tracking-widest">{card?.label}</p>
                 <p className="text-3xl font-black mt-1 font-sans text-black">
-                  <AnimatedNumber value={val} />
+                  {val?.toLocaleString?.('pt-BR') ?? '0'}
                 </p>
               </div>
             </div>

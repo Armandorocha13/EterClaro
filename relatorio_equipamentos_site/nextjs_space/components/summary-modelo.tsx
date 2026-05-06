@@ -5,7 +5,7 @@ import type { ResumoModelo } from '@/lib/excel-utils';
 export function SummaryModelo({ data }: { data: ResumoModelo[] }) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-5">
-      <h2 className="text-sm font-bold text-slate-700 mb-3">📦 Resumo por Modelo — Total de Reposição 7 Dias</h2>
+      <h2 className="text-sm font-bold text-slate-700 mb-3">Resumo por Modelo — Total de Reposição 7 Dias</h2>
       <div className="max-h-[500px] overflow-auto border border-slate-200 rounded-lg">
         <table className="w-full text-sm">
           <thead className="sticky top-0 z-10">

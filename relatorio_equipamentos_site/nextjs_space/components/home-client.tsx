@@ -66,7 +66,7 @@ export function HomeClient({ latestUpload }: { latestUpload: UploadInfo | null }
               )}
               {isLoggedIn ? (
                 <button
-                  onClick={() => signOut({ redirect: false })}
+                  onClick={() => signOut({ callbackUrl: '/login' })}
                   className="flex items-center gap-2 px-4 py-2 border border-black hover:bg-black hover:text-white rounded-md text-sm font-semibold transition-all"
                 >
                   <LogOut className="h-4 w-4" />

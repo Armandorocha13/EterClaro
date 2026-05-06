@@ -40,7 +40,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f3f4f6] flex flex-col font-sans text-[#202124]">
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-[480px] bg-white rounded-[40px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] p-12 sm:p-16 flex flex-col items-center animate-fade-in">
+        <div className="w-full max-w-[480px] bg-white rounded-[40px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] p-12 sm:p-16 flex flex-col items-center">
           
           {/* Logo Area */}
           <div className="relative h-20 w-20 mb-8">
