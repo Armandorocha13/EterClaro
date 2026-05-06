@@ -31,7 +31,7 @@ export default function LineChartComponent({ data }: Props) {
             contentStyle={{ fontSize: 11 }}
             labelFormatter={(label: any, payload: any) => payload?.[0]?.payload?.fullDate ?? label}
           />
-          <Line type="monotone" dataKey="count" stroke="#A19AD3" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 5 }} />
+          <Line type="monotone" dataKey="count" stroke="#ee1111" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 5 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>

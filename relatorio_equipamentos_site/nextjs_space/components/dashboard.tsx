@@ -150,13 +150,16 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
         <div className="bg-white/10 p-2 rounded">
           <Info className="h-5 w-5 text-white" />
         </div>
-        <div className="text-xs sm:text-sm font-medium tracking-wide leading-relaxed">
-          <span className="opacity-60 uppercase font-bold mr-2">RELATÓRIO ATIVO:</span> 
-          <span className="font-bold">{data?.uploadInfo?.fileName ?? 'N/A'}</span>
+        <div className="text-xs sm:text-sm font-medium tracking-wide leading-relaxed flex items-center flex-wrap">
+          <div className="flex items-center gap-2 text-green-400">
+            <div className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+            <span className="opacity-60 uppercase font-bold">Sincronizado:</span>
+            <span className="font-bold text-white">{new Date(data?.uploadInfo?.createdAt).toLocaleString('pt-BR')}</span>
+          </div>
           <span className="mx-3 opacity-20">|</span>
           <span className="opacity-60 uppercase font-bold mr-2">REGISTROS:</span>
-          <span className="font-bold">{data?.uploadInfo?.recordCount ?? 0}</span>
-          <div className="mt-1 opacity-60">
+          <span className="font-bold">{data?.uploadInfo?.recordCount?.toLocaleString?.('pt-BR') ?? 0}</span>
+          <div className="w-full mt-1 opacity-60">
             Regra de Negócio: Projeção baseada em 7 dias fixos trabalhados. Valores arredondados superiormente.
           </div>
         </div>
