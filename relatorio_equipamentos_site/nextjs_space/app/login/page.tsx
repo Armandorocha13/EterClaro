@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -24,61 +25,70 @@ export default function LoginPage() {
         redirect: false,
       });
       if (res?.error) {
-        setError('Email ou senha inválidos');
+        setError('E-mail ou senha incorretos');
       } else {
         router.replace('/');
       }
     } catch {
-      setError('Erro ao fazer login');
+      setError('Erro ao processar login');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-slate-100 px-4">
-      <div className="w-full max-w-sm">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
-          <div className="text-center mb-6">
-            <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <Lock className="w-7 h-7 text-white" />
+    <div className="min-h-screen flex items-center justify-center bg-white px-4 selection:bg-black selection:text-white">
+      <div className="w-full max-w-md">
+        {/* Login Card */}
+        <div className="bg-white border-2 border-black rounded-sm shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-8 sm:p-12">
+          <div className="flex flex-col items-center mb-10">
+            <div className="relative h-20 w-48 mb-8">
+              <Image
+                src="/logo.png"
+                alt="Logo ETER"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
-            <h1 className="text-xl font-bold text-slate-800">Área Administrativa</h1>
-            <p className="text-sm text-slate-500 mt-1">Acesse para gerenciar relatórios</p>
+            <div className="space-y-1 text-center">
+              <h1 className="text-xl font-black uppercase tracking-tighter text-black">Acesso ao Sistema</h1>
+              <p className="text-[10px] font-bold text-black/40 uppercase tracking-[0.2em]">PROJEÇÃO DE MATERIAL CLARO</p>
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs font-semibold text-slate-600 uppercase mb-1 block">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-black uppercase tracking-widest block ml-1">E-mail Corporativo</label>
+              <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black transition-transform group-focus-within:scale-110" />
                 <input
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                  placeholder="seu@email.com"
+                  className="w-full pl-12 pr-4 py-3.5 border-2 border-black rounded-sm focus:bg-black/5 outline-none font-bold text-sm placeholder:text-black/20 placeholder:font-medium transition-all"
+                  placeholder="EX: NOME@ETER.COM.BR"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-slate-600 uppercase mb-1 block">Senha</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-black uppercase tracking-widest block ml-1">Senha de Acesso</label>
+              <div className="relative group">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black transition-transform group-focus-within:scale-110" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full pl-12 pr-12 py-3.5 border-2 border-black rounded-sm focus:bg-black/5 outline-none font-bold text-sm placeholder:text-black/20 placeholder:font-medium transition-all"
                   placeholder="••••••••"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-black/40 hover:text-black transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -86,7 +96,7 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg border border-red-200">
+              <div className="bg-black text-white text-[10px] font-black uppercase tracking-widest px-4 py-3 border-2 border-black text-center animate-shake">
                 {error}
               </div>
             )}
@@ -94,16 +104,25 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm"
+              className="w-full bg-black text-white py-4 rounded-sm font-black uppercase tracking-[0.2em] text-xs hover:bg-white hover:text-black border-2 border-black transition-all disabled:opacity-30 active:translate-y-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             >
-              {loading ? 'Entrando...' : 'Entrar'}
+              {loading ? 'AUTENTICANDO...' : 'ENTRAR NO SISTEMA'}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-xs text-slate-400 mt-4">
-          Relatório de Instalações • Área Restrita
-        </p>
+        <div className="mt-12 text-center space-y-4">
+          <p className="text-[10px] font-black text-black/20 uppercase tracking-[0.3em]">
+            ETER - Eletricidade e Telecomunicações Ltda
+          </p>
+          <div className="flex items-center justify-center gap-4 text-[9px] font-bold text-black/40 uppercase tracking-widest">
+            <span>Privacidade</span>
+            <span className="h-1 w-1 bg-black/10 rounded-full"></span>
+            <span>Termos de Uso</span>
+            <span className="h-1 w-1 bg-black/10 rounded-full"></span>
+            <span>Suporte TI</span>
+          </div>
+        </div>
       </div>
     </div>
   );
