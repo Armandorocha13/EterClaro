@@ -13,9 +13,11 @@ export async function POST(request: Request) {
         deployment_token: process.env.ABACUSAI_API_KEY,
         html_content,
         pdf_options: { format: 'A4', landscape: true, print_background: true, margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' } },
-        base_url: process.env.NEXTAUTH_URL || '',
+        base_url: process.env.NEXTAUTH_URL || 'http://localhost:3000',
       }),
     });
+    
+    console.log('PDF Request sent, status:', createResponse.status);
 
     if (!createResponse.ok) {
       return NextResponse.json({ success: false, error: 'Falha ao criar PDF' }, { status: 500 });

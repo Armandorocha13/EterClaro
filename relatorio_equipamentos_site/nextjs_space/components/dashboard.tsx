@@ -101,29 +101,8 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
     };
   }, [data, filterTecnico, filterModelo, searchText]);
 
-  const handlePdf = async () => {
-    setPdfLoading(true);
-    try {
-      const htmlContent = buildPdfHtml(filtered, data?.uploadInfo);
-      const res = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html_content: htmlContent }),
-      });
-      if (!res.ok) throw new Error('Falha na geração do PDF');
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'relatorio-projecao.pdf';
-      a.click();
-      URL.revokeObjectURL(url);
-      toast.success('PDF baixado com sucesso!');
-    } catch (err: any) {
-      toast.error(err?.message ?? 'Erro ao gerar PDF');
-    } finally {
-      setPdfLoading(false);
-    }
+  const handlePdf = () => {
+    window.print();
   };
 
   if (loading) {
@@ -145,25 +124,6 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
 
   return (
     <div className="space-y-8">
-      {/* Info box */}
-      <div className="bg-black text-white p-5 rounded-lg flex items-start gap-4 shadow-lg">
-        <div className="bg-white/10 p-2 rounded">
-          <Info className="h-5 w-5 text-white" />
-        </div>
-        <div className="text-xs sm:text-sm font-medium tracking-wide leading-relaxed flex items-center flex-wrap">
-          <div className="flex items-center gap-2 text-green-400">
-            <div className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-            <span className="opacity-60 uppercase font-bold">Sincronizado:</span>
-            <span className="font-bold text-white">{new Date(data?.uploadInfo?.createdAt).toLocaleString('pt-BR')}</span>
-          </div>
-          <span className="mx-3 opacity-20">|</span>
-          <span className="opacity-60 uppercase font-bold mr-2">REGISTROS:</span>
-          <span className="font-bold">{data?.uploadInfo?.recordCount?.toLocaleString?.('pt-BR') ?? 0}</span>
-          <div className="w-full mt-1 opacity-60">
-            Regra de Negócio: Projeção baseada em 7 dias fixos trabalhados. Valores arredondados superiormente.
-          </div>
-        </div>
-      </div>
 
       {/* Filters */}
       <div className="bg-white border border-black/10 rounded-xl p-6 shadow-sm flex flex-wrap items-center gap-6">
@@ -205,11 +165,10 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
         <div className="flex flex-col gap-1.5 pt-5">
           <button
             onClick={handlePdf}
-            disabled={pdfLoading}
-            className="flex items-center justify-center gap-3 px-6 py-2.5 bg-black hover:bg-black/80 text-white rounded-md text-xs font-black uppercase tracking-widest transition-all disabled:opacity-30 shadow-md"
+            className="flex items-center justify-center gap-3 px-6 py-2.5 bg-black hover:bg-black/80 text-white rounded-md text-xs font-black uppercase tracking-widest transition-all shadow-md"
           >
-            {pdfLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            {pdfLoading ? 'PROCESSANDO...' : 'EXPORTAR PDF'}
+            <Download className="h-4 w-4" />
+            EXPORTAR PDF
           </button>
         </div>
       </div>
@@ -230,58 +189,4 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
       <SummaryModelo data={filtered.resumoModelos} />
     </div>
   );
-}
-
-function buildPdfHtml(filtered: any, uploadInfo: any) {
-  const detailRows = (filtered?.detailTable ?? []).map((r: any) =>
-    `<tr><td>${(r?.tecnico ?? '').toUpperCase()}</td><td>${r?.modelo ?? ''}</td><td class="num">${r?.qtdTotal ?? 0}</td><td class="num">${r?.diasRelatorio ?? 0}</td><td class="num">${r?.mediaDiaria ?? 0}</td><td class="num">${r?.projecao7Dias ?? 0}</td></tr>`
-  ).join('');
-  const tecRows = (filtered?.resumoTecnicos ?? []).map((r: any) =>
-    `<tr><td>${(r?.tecnico ?? '').toUpperCase()}</td><td class="num">${r?.totalInstalacoes ?? 0}</td><td class="num">${r?.diasRelatorio ?? 0}</td><td class="num">${r?.mediaDiariaTotal ?? 0}</td><td class="num">${r?.reposicao7Dias ?? 0}</td><td><span class="badge badge-${(r?.volume ?? 'Baixo') === 'Alto' ? 'high' : (r?.volume ?? 'Baixo') === 'Médio' ? 'med' : 'low'}">${r?.volume ?? ''}</span></td></tr>`
-  ).join('');
-  const modRows = (filtered?.resumoModelos ?? []).map((r: any) =>
-    `<tr><td>${r?.modelo ?? ''}</td><td class="num">${r?.qtdTotal ?? 0}</td><td class="num">${r?.tecnicosQueInstalam ?? 0}</td><td class="num">${r?.mediaDiariaGeral ?? 0}</td><td class="num">${r?.reposicao7Dias ?? 0}</td></tr>`
-  ).join('');
-
-  return `<!DOCTYPE html><html><head><style>
-    body{font-family:'Helvetica',Arial,sans-serif;font-size:10px;color:#000;padding:40px;line-height:1.4;}
-    .header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #000;padding-bottom:20px;margin-bottom:30px;}
-    .logo-placeholder{font-size:24px;font-weight:bold;letter-spacing:-1px;}
-    .title-area{text-align:right;}
-    h1{font-size:16px;text-transform:uppercase;margin:0;letter-spacing:1px;}
-    .report-info{font-size:9px;color:#666;text-transform:uppercase;margin-top:5px;font-weight:bold;}
-    h2{font-size:12px;margin:30px 0 15px;text-transform:uppercase;border-left:4px solid #000;padding-left:10px;letter-spacing:1px;}
-    table{width:100%;border-collapse:collapse;margin-bottom:20px;}
-    th{background:#f0f0f0;padding:8px 10px;text-align:left;font-size:9px;text-transform:uppercase;border:1px solid #ddd;font-weight:bold;}
-    td{padding:6px 10px;border:1px solid #eee;font-size:9px;}
-    .num{text-align:right;font-family:monospace;}
-    .badge{padding:2px 6px;border-radius:2px;font-size:8px;font-weight:bold;text-transform:uppercase;}
-    .badge-high{background:#000;color:#fff;}
-    .badge-med{background:#666;color:#fff;}
-    .badge-low{background:#ccc;color:#000;}
-    .kpi-row{display:flex;gap:15px;margin-bottom:30px;}
-    .kpi{background:#fff;border:1px solid #000;padding:12px 15px;flex:1;}
-    .kpi .label{font-size:8px;text-transform:uppercase;color:#666;font-weight:bold;margin-bottom:5px;}
-    .kpi .value{font-size:20px;font-weight:bold;color:#000;}
-    .footer{margin-top:50px;font-size:8px;color:#999;text-align:center;text-transform:uppercase;letter-spacing:2px;border-top:1px solid #eee;padding-top:20px;}
-  </style></head><body>
-    <div class="header">
-      <div class="logo-placeholder">ETER - CLARO</div>
-      <div class="title-area">
-        <h1>Projeção de Reposição de Material</h1>
-        <div class="report-info">Arquivo: ${uploadInfo?.fileName ?? 'N/A'} • Registros: ${uploadInfo?.recordCount ?? 0}</div>
-      </div>
-    </div>
-    <div class="kpi-row">
-      <div class="kpi"><div class="label">Total Instalações</div><div class="value">${filtered?.kpis?.totalInstalacoes ?? 0}</div></div>
-      <div class="kpi"><div class="label">Técnicos Ativos</div><div class="value">${filtered?.kpis?.tecnicosAtivos ?? 0}</div></div>
-      <div class="kpi"><div class="label">Modelos Distintos</div><div class="value">${filtered?.kpis?.modelosDistintos ?? 0}</div></div>
-      <div class="kpi"><div class="label">Projeção 7 Dias</div><div class="value">${filtered?.kpis?.projecaoTotal7Dias ?? 0}</div></div>
-    </div>
-    <h2>Resumo Consolidado por Técnico</h2>
-    <table><thead><tr><th>Técnico</th><th class="num">Total Inst.</th><th class="num">Dias Rel.</th><th class="num">Média Diária</th><th class="num">Projeção 7D</th><th>Volume</th></tr></thead><tbody>${tecRows}</tbody></table>
-    <h2>Análise por Modelo de Terminal</h2>
-    <table><thead><tr><th>Modelo</th><th class="num">Qtd Total</th><th class="num">Técnicos</th><th class="num">Média Geral</th><th class="num">Projeção 7D</th></tr></thead><tbody>${modRows}</tbody></table>
-    <div class="footer">Sistema Interno ETER - Geração em ${new Date().toLocaleDateString('pt-BR')}</div>
-  </body></html>`;
 }

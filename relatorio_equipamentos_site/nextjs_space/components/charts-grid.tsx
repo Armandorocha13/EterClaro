@@ -26,7 +26,7 @@ export function ChartsGrid({ chartData }: { chartData: ChartData }) {
             Reposição por Modelo (Total Geral)
           </h2>
           {(chartData?.reposicaoPorModelo?.length ?? 0) > 0 ? (
-            <BarChartComponent data={chartData?.reposicaoPorModelo ?? []} color="#000080" />
+            <BarChartComponent data={chartData?.reposicaoPorModelo ?? []} color="#051043ff" />
           ) : (
             <div className="h-[300px] flex items-center justify-center text-slate-400 text-sm">Nenhum dado para exibir</div>
           )}
@@ -38,7 +38,7 @@ export function ChartsGrid({ chartData }: { chartData: ChartData }) {
             Média Diária por Técnico
           </h2>
           {(chartData?.mediaDiariaPorTecnico?.length ?? 0) > 0 ? (
-            <BarChartComponent data={chartData?.mediaDiariaPorTecnico ?? []} color="#000080" isTechnician={true} />
+            <BarChartComponent data={chartData?.mediaDiariaPorTecnico ?? []} color="#040c30ff" isTechnician={true} />
           ) : (
             <div className="h-[300px] flex items-center justify-center text-slate-400 text-sm">Nenhum dado para exibir</div>
           )}

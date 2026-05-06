@@ -54,33 +54,44 @@ export function HomeClient({ latestUpload }: { latestUpload: UploadInfo | null }
                 <p className="text-black/60 text-xs sm:text-sm font-medium">Dashboard Corporativo de Gestão</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {isLoggedIn && uploadId && (
-                <button
-                  onClick={() => setShowUpload(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-black/80 text-white rounded-md text-sm font-semibold transition-all"
-                >
-                  <Upload className="h-4 w-4" />
-                  Novo Upload
-                </button>
+            <div className="flex items-center gap-4">
+              {uploadId && latestUpload && (
+                <div className="hidden lg:flex items-center gap-2 mr-6 py-1.5 border-r border-black/10 pr-6">
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)] animate-pulse" />
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-black text-black/40 uppercase tracking-[0.2em] leading-none mb-0.5">Sistema Sincronizado</span>
+                    <span className="text-[11px] font-bold text-black leading-none">{new Date(latestUpload.createdAt).toLocaleString('pt-BR')}</span>
+                  </div>
+                </div>
               )}
-              {isLoggedIn ? (
-                <button
-                  onClick={() => signOut({ callbackUrl: '/login' })}
-                  className="flex items-center gap-2 px-4 py-2 border border-black hover:bg-black hover:text-white rounded-md text-sm font-semibold transition-all"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Sair
-                </button>
-              ) : (
-                <button
-                  onClick={() => router.push('/login')}
-                  className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-black/80 text-white rounded-md text-sm font-semibold transition-all"
-                >
-                  <LogIn className="h-4 w-4" />
-                  Login
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {isLoggedIn && uploadId && (
+                  <button
+                    onClick={() => setShowUpload(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-black/80 text-white rounded-md text-sm font-semibold transition-all shadow-sm"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Novo Upload
+                  </button>
+                )}
+                {isLoggedIn ? (
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/login' })}
+                    className="flex items-center gap-2 px-4 py-2 border border-black hover:bg-black hover:text-white rounded-md text-sm font-semibold transition-all shadow-sm"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sair
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => router.push('/login')}
+                    className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-black/80 text-white rounded-md text-sm font-semibold transition-all shadow-sm"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    Login
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

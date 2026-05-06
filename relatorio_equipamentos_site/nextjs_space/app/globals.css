@@ -150,3 +150,33 @@
       radial-gradient(ellipse 40% 30% at 20% 10%, hsl(240 80% 60% / 0.08), transparent);
   }
 }
+
+@media print {
+  header, footer, button, select, input, label, .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+  .grid {
+    display: block !important;
+  }
+  .bg-white {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-bottom: 20px !important;
+  }
+  h1, h2 {
+    color: black !important;
+  }
+  .recharts-responsive-container {
+    width: 100% !important;
+    height: 400px !important;
+  }
+  .print-break {
+    page-break-after: always;
+  }
+}
