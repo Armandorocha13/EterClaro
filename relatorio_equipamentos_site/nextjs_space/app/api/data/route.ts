@@ -1,11 +1,18 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { processData } from '@/lib/excel-utils';
 
 export async function GET(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Não autorizado. Faça login para visualizar os dados.' }, { status: 401 });
+    }
+
     const url = new URL(request.url);
     const uploadId = url.searchParams.get('uploadId');
 

@@ -20,7 +20,17 @@ export const authOptions: NextAuthOptions = {
           if (!user) return null;
           const isValid = await bcrypt.compare(credentials.password, user.password);
           if (!isValid) return null;
-          return { id: user.id, email: user.email, name: user.name ?? user.email };
+          
+          // Somente este e-mail tem permissão de admin
+          const adminEmail = 'thiagosouza@ffainfraestrutura.com.br';
+          const finalRole = user.email.toLowerCase().trim() === adminEmail ? 'admin' : 'user';
+
+          return { 
+            id: user.id, 
+            email: user.email, 
+            name: user.name ?? user.email,
+            role: finalRole 
+          };
         } catch {
           return null;
         }
@@ -35,13 +45,18 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
+        
+        // Reforçar a verificação de admin por e-mail na sessão
+        const adminEmail = 'thiagosouza@ffainfraestrutura.com.br';
+        (session.user as any).role = session.user.email?.toLowerCase().trim() === adminEmail ? 'admin' : 'user';
+        
         session.user.email = token.email as string;
       }
       return session;

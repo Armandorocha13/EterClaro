@@ -179,4 +179,25 @@
   .print-break {
     page-break-after: always;
   }
+  /* Ensure all content in scrollable areas is visible */
+  .overflow-auto, [class*="max-h-"] {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+  /* Force text colors to be black for better PDF quality */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
 }

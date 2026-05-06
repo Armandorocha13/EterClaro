@@ -73,6 +73,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado. Faça login para enviar arquivos.' }, { status: 401 });
     }
 
+    if ((session.user as any)?.role !== 'admin') {
+      return NextResponse.json({ error: 'Apenas administradores podem realizar novos uploads.' }, { status: 403 });
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     if (!file) {

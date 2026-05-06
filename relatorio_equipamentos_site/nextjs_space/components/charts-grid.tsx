@@ -26,7 +26,7 @@ export function ChartsGrid({ chartData }: { chartData: ChartData }) {
             Reposição por Modelo (Total Geral)
           </h2>
           {(chartData?.reposicaoPorModelo?.length ?? 0) > 0 ? (
-            <BarChartComponent data={chartData?.reposicaoPorModelo ?? []} color="#051043ff" />
+            <BarChartComponent data={chartData?.reposicaoPorModelo ?? []} color="#0510w43ff" />
           ) : (
             <div className="h-[300px] flex items-center justify-center text-slate-400 text-sm">Nenhum dado para exibir</div>
           )}

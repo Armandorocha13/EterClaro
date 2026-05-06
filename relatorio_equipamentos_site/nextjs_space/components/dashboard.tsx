@@ -7,6 +7,8 @@ import { ChartsGrid } from './charts-grid';
 import { DetailTable } from './detail-table';
 import { SummaryTecnico } from './summary-tecnico';
 import { SummaryModelo } from './summary-modelo';
+import { SummaryModal } from './summary-modal';
+import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
 import type { KPIs, TecnicoModeloStats, ResumoTecnico, ResumoModelo, ChartData } from '@/lib/excel-utils';
 
@@ -22,12 +24,15 @@ interface DashboardData {
 }
 
 export function Dashboard({ uploadId }: { uploadId: string }) {
+  const { data: session } = useSession();
+  const [view, setView] = useState<'dashboard' | 'upload'>('dashboard');
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterTecnico, setFilterTecnico] = useState('');
   const [filterModelo, setFilterModelo] = useState('');
   const [searchText, setSearchText] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
 
   useEffect(() => {
@@ -38,6 +43,7 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
         if (!res.ok) throw new Error('Erro ao carregar dados');
         const json = await res.json();
         setData(json);
+        setIsModalOpen(true); // Open modal after data load
       } catch (err: any) {
         setError(err?.message ?? 'Erro');
       } finally {
@@ -124,6 +130,21 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
 
   return (
     <div className="space-y-8">
+      <SummaryModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        detailData={data?.detailTable ?? []}
+        resumoModelos={data?.resumoModelos ?? []}
+      />
+
+      {/* Print-only Header */}
+      <div className="hidden print:block border-b-2 border-black pb-4 mb-6">
+        <h1 className="text-2xl font-bold uppercase">Projeção de Reposição de Material — ETER CLARO</h1>
+        <div className="flex justify-between items-end mt-2 text-[10px] font-bold uppercase text-slate-500">
+          <div>Arquivo: {data?.uploadInfo?.fileName}</div>
+          <div>Gerado em: {new Date().toLocaleString('pt-BR')}</div>
+        </div>
+      </div>
 
       {/* Filters */}
       <div className="bg-white border border-black/10 rounded-xl p-6 shadow-sm flex flex-wrap items-center gap-6">
@@ -162,7 +183,22 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-1.5 pt-5">
+        <div className="flex items-center gap-3">
+          {session?.user?.email?.toLowerCase() === 'thiagosouza@ffainfraestrutura.com.br' && (
+            <button 
+              onClick={() => setView('upload')} 
+              className="flex items-center gap-2 px-4 py-2 bg-[#020617] text-white rounded-lg hover:bg-black transition-all shadow-lg shadow-blue-200 text-xs font-black uppercase tracking-widest"
+            >
+              <Download className="h-4 w-4" />
+              Novo Upload
+            </button>
+          )}
+          <button 
+            onClick={() => signOut()}
+            className="flex items-center gap-2 px-4 py-2 border border-black/10 text-black/60 rounded-lg hover:bg-black/5 transition-all text-xs font-black uppercase tracking-widest"
+          >
+            Sair
+          </button>
           <button
             onClick={handlePdf}
             className="flex items-center justify-center gap-3 px-6 py-2.5 bg-black hover:bg-black/80 text-white rounded-md text-xs font-black uppercase tracking-widest transition-all shadow-md"
@@ -178,6 +214,7 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
 
       {/* Charts */}
       <ChartsGrid chartData={filtered.chartData} />
+      <div className="print-break" />
 
       {/* Detail Table */}
       <DetailTable data={filtered.detailTable} />

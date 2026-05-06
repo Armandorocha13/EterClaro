@@ -4,7 +4,8 @@ import { useState, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { UploadZone } from './upload-zone';
 import { Dashboard } from './dashboard';
-import { BarChart3, Upload, LogIn, LogOut } from 'lucide-react';
+import { BarChart3, Upload, LogIn, LogOut, Shield } from 'lucide-react';
+import { UserManagement } from './user-management';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -22,7 +23,10 @@ export function HomeClient({ latestUpload }: { latestUpload: UploadInfo | null }
   const router = useRouter();
   const [uploadId, setUploadId] = useState<string | null>(latestUpload?.id ?? null);
   const [showUpload, setShowUpload] = useState(false);
+  const [showUsers, setShowUsers] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const isAdmin = session?.user?.email?.toLowerCase() === 'thiagosouza@ffainfraestrutura.com.br' || (session?.user as any)?.role === 'admin';
 
   const handleUploadSuccess = useCallback((newUploadId: string) => {
     setUploadId(newUploadId);
@@ -65,14 +69,23 @@ export function HomeClient({ latestUpload }: { latestUpload: UploadInfo | null }
                 </div>
               )}
               <div className="flex items-center gap-2">
-                {isLoggedIn && uploadId && (
-                  <button
-                    onClick={() => setShowUpload(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-black/80 text-white rounded-md text-sm font-semibold transition-all shadow-sm"
-                  >
-                    <Upload className="h-4 w-4" />
-                    Novo Upload
-                  </button>
+                {isAdmin && uploadId && (
+                  <>
+                    <button
+                      onClick={() => { setShowUpload(true); setShowUsers(false); }}
+                      className="flex items-center gap-2 px-4 py-2 bg-[#020617] text-white rounded-lg hover:bg-black transition-all shadow-lg shadow-blue-200 text-xs font-black uppercase tracking-widest"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Novo Upload
+                    </button>
+                    <button
+                      onClick={() => { setShowUsers(true); setShowUpload(false); }}
+                      className="flex items-center gap-2 px-4 py-2 border-2 border-[#020617] text-[#020617] rounded-lg hover:bg-slate-50 transition-all text-xs font-black uppercase tracking-widest"
+                    >
+                      <Shield className="h-4 w-4" />
+                      Acessos
+                    </button>
+                  </>
                 )}
                 {isLoggedIn ? (
                   <button
@@ -100,20 +113,9 @@ export function HomeClient({ latestUpload }: { latestUpload: UploadInfo | null }
       {/* Content */}
       <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {showUpload && isLoggedIn ? (
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white border border-black/10 rounded-xl p-8 shadow-sm">
-              <h2 className="text-2xl font-bold mb-6 text-center">Importar Relatório Excel</h2>
-              <UploadZone onSuccess={handleUploadSuccess} />
-              {uploadId && (
-                <button
-                  onClick={() => setShowUpload(false)}
-                  className="mt-6 w-full text-center text-sm font-bold uppercase tracking-wider hover:underline"
-                >
-                  ← Voltar ao Dashboard
-                </button>
-              )}
-            </div>
-          </div>
+          <UploadZone onSuccess={handleUploadSuccess} />
+        ) : showUsers && isAdmin ? (
+          <UserManagement onBack={() => setShowUsers(false)} />
         ) : uploadId ? (
           <Dashboard uploadId={uploadId} />
         ) : (
