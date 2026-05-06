@@ -183,28 +183,13 @@ export function Dashboard({ uploadId }: { uploadId: string }) {
             />
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          {session?.user?.email?.toLowerCase() === 'thiagosouza@ffainfraestrutura.com.br' && (
-            <button 
-              onClick={() => setView('upload')} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#020617] text-white rounded-lg hover:bg-black transition-all shadow-lg shadow-blue-200 text-xs font-black uppercase tracking-widest"
-            >
-              <Download className="h-4 w-4" />
-              Novo Upload
-            </button>
-          )}
-          <button 
-            onClick={() => signOut()}
-            className="flex items-center gap-2 px-4 py-2 border border-black/10 text-black/60 rounded-lg hover:bg-black/5 transition-all text-xs font-black uppercase tracking-widest"
-          >
-            Sair
-          </button>
+        <div className="flex items-center gap-3 ml-auto pt-4 w-full border-t border-black/5">
           <button
             onClick={handlePdf}
-            className="flex items-center justify-center gap-3 px-6 py-2.5 bg-black hover:bg-black/80 text-white rounded-md text-xs font-black uppercase tracking-widest transition-all shadow-md"
+            className="flex items-center justify-center gap-3 px-6 py-2.5 bg-[#020617] hover:bg-black text-white rounded-lg text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-100"
           >
             <Download className="h-4 w-4" />
-            EXPORTAR PDF
+            EXPORTAR RELATÓRIO PDF
           </button>
         </div>
       </div>
